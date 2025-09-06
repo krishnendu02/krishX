@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Tweet
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Welcome to KrishX</h1>
+
+<a class="btn btn-primary mb-4" href="{% url 'tweet_create' %}">Create a Tweet</a>
+
+<div class="container row gap-3">
+    {% for tweet in tweets %}
+    <div class="card" style="width: 18rem;">
+        
+        <!-- Change the upper line with if else -->
+         
+        {% if tweet.photo %}
+        <img src="{{tweet.photo.url}}" class="card-img-top" alt="Tweet photo">
+        {% else %}
+        <img src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" class="card-img-top" alt="No photo">
+        {% endif %}
+        
+        <div class="card-body">
+            <h5 class="card-title">{{tweet.user.username}}</h5>
+            <p class="card-text">{{tweet.text}}</p>
+            <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+
+    {% endfor %}
+
+
+</div>
+
+
+
+
+{% endblock %}
