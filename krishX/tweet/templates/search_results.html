@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Tweet
+{% endblock %}
+
+{% block content %}
+<h1>Search Results for "{{ query }}"</h1>
+
+{% if results %}
+    <ul class="list-group list-group-horizontal" style="list-style-type: none;">
+        {% for item in results %}
+            <li class=" mx-3">{{ item. }}</li> 
+            {# Replace 'field_to_display' with an actual field from your model #}
+            <div class="card" style="width: 18rem;">
+        
+                {% if item.photo %}
+                <img src="{{item.photo.url}}" class="card-img-top" alt="Tweet photo">
+                {% else %}
+                <img src="https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg" class="card-img-top" alt="No photo">
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{item.user.username}}</h5>
+                    <p class="card-text">{{item.text}}</p>
+        
+                    {% if item.user == user %}
+                    <a href="{% url 'tweet_edit' item.id %}" class="btn btn-primary">Edit</a>
+                    <a href="{% url 'tweet_delete' item.id %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+  
+{% endblock %}

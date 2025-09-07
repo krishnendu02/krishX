@@ -3,6 +3,7 @@ from .models import Tweet
 from .forms import TweetForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.db.models import Q
 
 
 # Create your views here.
@@ -70,3 +71,21 @@ def register(request):
     
     
     return render(request, 'registration/register.html', {'form': form})
+
+# Creating Search Bar
+def search_results(request):
+    query = request.GET.get('q')
+    results = []
+    if query:
+        # Filter your model based on the search query
+        # Using __icontains for case-insensitive partial match
+        results = Tweet.objects.filter(text__icontains=query)
+        # You can add more fields to search across using Q objects for OR conditions
+        
+        # results = Tweet.objects.filter(Q(text__icontains=query) | Q(user__icontains=query))
+
+    context = {
+        'query': query,
+        'results': results,
+    }
+    return render(request, 'search_results.html', context)
