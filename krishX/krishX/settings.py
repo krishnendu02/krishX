@@ -22,15 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^ulhz9a_rt)xx39-f+4+p_f#12(4umlf$eefp-d^qm83*q)(h^'
+# SECRET_KEY = 'django-insecure-^ulhz9a_rt)xx39-f+4+p_f#12(4umlf$eefp-d^qm83*q)(h^'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-# DEBUG = True
 
-
-ALLOWED_HOSTS = ['*']
-
+# Set to your PythonAnywhere domain, e.g., ['yourusername.pythonanywhere.com']
+# We'll read this from an environment variable for flexibility.
+allowed_hosts_env = os.environ.get('ALLOWED_HOSTS')
+ALLOWED_HOSTS = allowed_hosts_env.split(',') if allowed_hosts_env else []
 
 # Application definition
 
@@ -46,7 +47,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware', # Not needed on PythonAnywhere
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -126,16 +127,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# This is the directory where Django will collect all static files.
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# This is where Django will look for static files in your project during development.
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # Not needed on PythonAnywhere
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
